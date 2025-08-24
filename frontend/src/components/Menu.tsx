@@ -1,4 +1,4 @@
-import "../styles/Menu.scss";
+import "../../styles/Menu.scss";
 
 export default function Menu() {
   return (

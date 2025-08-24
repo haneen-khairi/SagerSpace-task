@@ -1,6 +1,6 @@
 import Sidebar from "../Sidebar";
 import Menu from "../Menu";
-import "../../styles/Dashboard.scss";
+import "../../../styles/Dashboard.scss";
 
 export default function Dashboard() {
   return (
@@ -10,7 +10,6 @@ export default function Dashboard() {
       <Sidebar />
         <div className="dashboard-main">
           <h1>Drone Dashboard</h1>
-          {/* Mapbox or other content */}
         </div>
       </main>
     </div>

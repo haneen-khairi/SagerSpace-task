@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { io } from "socket.io-client";
-import Dashboard from "../components/Dashboard/Dashboard";
+import Dashboard from "./components/Dashboard/Dashboard";
 const socket = io("http://localhost:9013"); // match your backend port
 
 function App() {
