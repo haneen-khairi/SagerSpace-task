@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { io } from "socket.io-client";
 
-const socket = io("http://localhost:3000"); // backend URL
+const socket = io("http://localhost:9013"); // match your backend port
 
 function App() {
   useEffect(() => {
@@ -17,7 +17,7 @@ function App() {
   return (
     <div>
       <h1>Drone Dashboard</h1>
-      <p>Check console for live drone data...</p>
+      <p>Open the console to see live drone data</p>
     </div>
   );
 }
