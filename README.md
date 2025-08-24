@@ -78,3 +78,5 @@ id=0%3A1&mode=design&t=8JInLSibod30Em
 
 - i will use "monorepo" style to work on this project to show the result in one repo
  
+- start working on menu 
+- - menu files (menu.tsx , menu.scss) structure the menu of the dashboard used the icon as svg 
