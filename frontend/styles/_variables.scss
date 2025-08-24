@@ -1,0 +1,18 @@
+$primary-dark: #0b0b0b;
+$secondary-dark: #111111;
+$light: #ffffff;
+$grey: #777777;
+$text-grey: #65717c;
+$green: #5cfc00;
+$red: #f9000e;
+$disabled : #65717C;
+* {
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+    width:100%;
+}
+body { 
+    max-height: 100vh;
+    overflow: hidden;
+}

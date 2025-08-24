@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { io } from "socket.io-client";
-
+import Dashboard from "../components/Dashboard/Dashboard";
 const socket = io("http://localhost:9013"); // match your backend port
 
 function App() {
@@ -15,10 +15,7 @@ function App() {
   }, []);
 
   return (
-    <div>
-      <h1>Drone Dashboard</h1>
-      <p>Open the console to see live drone data</p>
-    </div>
+     <Dashboard />
   );
 }
 
