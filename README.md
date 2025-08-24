@@ -71,7 +71,7 @@ The target of this task is to have a drone tracing system, it shows all the dron
 https://www.figma.com/file/KKDrzOQboUrlPk0QbtgjmI/Sager-Task?type=design&node-
 id=0%3A1&mode=design&t=8JInLSibod30Em
 ```
-# End Task Requirement
+ 
 
 
 # Task Documentation 
