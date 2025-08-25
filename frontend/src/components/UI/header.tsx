@@ -1,8 +1,8 @@
-import Sidebar from "../Sidebar";
-import Menu from "../Menu";
-import "../../../styles/Dashboard.scss";
+import Sidebar from "./Sidebar";
+import Menu from "./Menu";
+import "../../../styles/Header.scss";
 
-export default function Dashboard() {
+export default function header() {
   return (
     <div className="dashboard-container">
         <Menu />
