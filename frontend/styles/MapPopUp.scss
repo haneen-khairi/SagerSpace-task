@@ -1,0 +1,174 @@
+@import "./variables";
+.map-popup {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  width: 340px;
+  height: 90vh;
+  background: $secondary-dark;
+  color: $light;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  z-index: 1000;
+}
+
+.tab-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 10px;
+}
+
+.tab-title {
+  font-size: 18px;
+  font-weight: 400;
+}
+
+.close-button {
+  background: #777777;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: none;
+  color: $primary-dark;
+  font-size: 13px;
+
+  cursor: pointer;
+}
+
+.popup-tabs {
+  display: flex;
+  border-bottom: 1px solid #070707;
+
+  button {
+    flex: 1;
+    position: relative;
+    margin: 0px 20px;
+    padding: 13px 0px;
+    background: none;
+    font-size: 16px;
+    font-weight: 400;
+    border: none;
+    color: #aaa;
+    max-width: fit-content;
+    border-bottom: 4px solid transparent;
+    cursor: pointer;
+
+    &.active {
+      border-bottom: 4px solid #f9000e;
+      color: #fff;
+    }
+
+    &:hover {
+      color: #fff;
+    }
+  }
+}
+
+.popup-content {
+  flex: 1;
+  padding: 15px 0px;
+  overflow-y: auto;
+  overflow-y: scroll;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  .drones-details-box {
+    height: 115px;
+    padding: 5px 15px;
+    border-bottom: 1px solid #070707;
+      &:hover {
+    background-color: #272727;
+  }
+    h3 {
+      font-family: Inter;
+      font-weight: 700;
+      font-style: Bold;
+      font-size: 16px;
+      line-height: 100%;
+      letter-spacing: 0%;
+      margin-bottom: 6px;
+    }
+    .drone-details {
+      display: grid;
+      grid-template-columns: 1fr 1fr 0.3fr;
+
+      .mini-details {
+        padding-bottom: 10px;
+        span {
+          font-family: Inter;
+          font-weight: 400;
+          font-style: Regular;
+          font-size: 11px;
+          leading-trim: NONE;
+          line-height: 100%;
+          letter-spacing: 0%;
+        }
+        p {
+          font-family: Inter;
+          font-weight: 700;
+          font-style: Bold;
+          font-size: 11px;
+          leading-trim: NONE;
+          line-height: 100%;
+          letter-spacing: 0%;
+        }
+      }
+      .drone-color {
+        position: relative;
+        .red-circle {
+          position: absolute;
+          left: 50%;
+          top: 37%;
+          transform: translate(-50%, -50%);
+          width: 18px;
+          height: 18px;
+          background-color: #f9000e;
+          border-radius: 50%;
+          border: 1px solid #fff;
+        }
+        .green-circle {
+          position: absolute;
+          left: 50%;
+          top: 37%;
+          transform: translate(-50%, -50%);
+          width: 18px;
+          height: 18px;
+          background-color: #5cfc00;
+          border-radius: 50%;
+          border: 1px solid $light;
+        }
+      }
+    }
+  }
+}
+
+.open-popup-btn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 2px solid $light;
+  background: $primary-dark;
+  color: $light;
+  font-size: 28px;
+  cursor: pointer;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #272727;
+    transform: scale(1.1);
+  }
+}

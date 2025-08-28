@@ -76,7 +76,27 @@ id=0%3A1&mode=design&t=8JInLSibod30Em
 
 # Task Documentation 
 
+- used library 
+    - - react-router-dom
+    - - mabbox-gl customized "mapbox://styles/haneenyousef/cmesij4bq00cc01qw2cn19fi1"
+    - - socket.io
+    
+
 - i will use "monorepo" style to work on this project to show the result in one repo
- 
+- i will build the code from scratch without use alot of library to done this task 
 - start working on menu 
 - - menu files (menu.tsx , menu.scss) structure the menu of the dashboard used the icon as svg 
+- sidebar
+    - - i add the dashboard as disabled button but the map as navlink 
+    - - i customize the style of sidebar in style/sidebar.scss file
+    
+- Map
+    - - i split the map for many files
+    - - one for the pop up and tabs
+    - - one for the map show 
+            - i use mapbox for the map and had customize the style from there website and add it to the code 
+    - - one for the drone customize
+    - - one for drone history 
+    
+
+- 
