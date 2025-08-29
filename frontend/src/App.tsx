@@ -102,7 +102,7 @@ function App() {
           <Sidebar />
           <div className="dashboard-main">
             <Routes> 
-              <Route path="/map" element={<Maps drones={Object.values(drones)} />} />
+              <Route path="/" element={<Maps drones={Object.values(drones)} />} />
             </Routes>
           </div>
         </main>
