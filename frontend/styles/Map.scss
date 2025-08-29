@@ -32,9 +32,9 @@
     .number {
         background-color: #1f2327;
         border-radius: 50%;
-        width: 27px;
-        height: 27px;
-        padding: 3px 7px;
+        width: 100%;
+        max-width: fit-content;
+        padding: 7px 7px;
         color: $light;
     }
 }

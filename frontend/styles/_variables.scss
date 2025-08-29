@@ -31,22 +31,23 @@ body {
 }
 .disabled {
     color: $disabled !important;
-     &:hover {
-                border-left: transparent;
-                background-color: transparent;
-            }
+    &:hover {
+        border-left: transparent;
+        background-color: transparent;
+    }
 }
 button {
-    border:transparent;
+    border: transparent;
     &::hover,
-     &::focus,
+    &::focus,
     &::focus-visible {
         outline: none !important;
     }
 }
-aside{
-    max-width:130px;
+aside {
+    max-width: 130px;
 }
-.dashboard-content{
+.dashboard-content {
     display: flex;
 }
+

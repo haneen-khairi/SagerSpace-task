@@ -16,7 +16,7 @@ interface MapPopupProps {
 
 const MapPopup: React.FC<MapPopupProps> = ({ drones }) => {
   const [activeTab, setActiveTab] = useState<"details" | "history">("details");
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
 
   return (
     <>
