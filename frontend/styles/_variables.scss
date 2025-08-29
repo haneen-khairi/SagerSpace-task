@@ -51,3 +51,12 @@ aside {
     display: flex;
 }
 
+@media screen and (max-width:786px) {
+    .sidebar{
+        display: none;
+    }
+    .map-popup{
+max-height: 300px;
+width:96%;
+    }
+}
