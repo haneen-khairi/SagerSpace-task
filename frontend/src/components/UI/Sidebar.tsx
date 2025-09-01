@@ -20,7 +20,7 @@ export default function Sidebar() {
         <div className="disabled-line"></div>
 
         <NavLink
-          to="/map"
+          to="/"
           style={
             { justifyContent: "center" }
           }
