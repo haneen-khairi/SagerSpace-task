@@ -99,4 +99,7 @@ id=0%3A1&mode=design&t=8JInLSibod30Em
     - - one for drone history 
     
 
-- 
+- please note 
+you have to run the backend local or change the link on the frontend to work fine 
+ this link it for frontend deploy "https://sager-space-task-5jrohy6to-haneenkhairis-projects.vercel.app/"
+ 
