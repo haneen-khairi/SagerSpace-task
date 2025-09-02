@@ -1,44 +1,59 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
-import MapPopup from "../UI/MapPopup";
-import "../../../styles/Map.scss";
-import "mapbox-gl/dist/mapbox-gl.css";
-import type { Drone } from "../../App";
-import DroneNumber from "./DroneNumber";
+import { io } from "socket.io-client";
 import DroneMarker from "./DroneMarker";
+import MapPopup from "./MapPopup";
 
 mapboxgl.accessToken =
   "pk.eyJ1IjoiaGFuZWVueW91c2VmIiwiYSI6ImNtZXI4b20xbTAzczQybnF0cXdzMmlqc3oifQ.dB9XSIFL1eH-4IcXxzkBDA";
 
-interface MapProps {
-  drones: Drone[];
+interface Drone {
+  serial: string;
+  registration: string;
+  name: string;
+  pilot: string;
+  organization: string;
+  color: "red" | "green";
+  path: { lat: number; lng: number }[];
 }
 
-const Map: React.FC<MapProps> = ({ drones }) => {
+export default function Map() {
   const mapContainer = useRef<HTMLDivElement | null>(null);
-  const [map, setMap] = useState<mapboxgl.Map | null>(null);
+  const map = useRef<mapboxgl.Map | null>(null);
+  const [drones, setDrones] = useState<Drone[]>([]);
+  const markersRef = useRef<Record<string, mapboxgl.Marker>>({});
 
   useEffect(() => {
-    if (map || !mapContainer.current) return;
-
-    const mapInstance = new mapboxgl.Map({
-      container: mapContainer.current,
-      style: "mapbox://styles/haneenyousef/cmesij4bq00cc01qw2cn19fi1",
-      center: [35.9313, 31.9487],
-      zoom: 12.5,
+    map.current = new mapboxgl.Map({
+      container: mapContainer.current!,
+      style: "mapbox://styles/mapbox/streets-v11",
+      center: [35.91, 31.95],
+      zoom: 6,
     });
 
-    setMap(mapInstance);
-  }, [map]);
+    const socket = io("http://localhost:9013");
+
+    socket.on("message", (data: Drone[]) => {
+      // For each drone, update path
+      const updatedDrones = data.map((d) => {
+        const existing = drones.find((dr) => dr.registration === d.registration);
+        if (existing) {
+          return { ...d, path: [...existing.path, { lat: d.path[d.path.length-1].lat, lng: d.path[d.path.length-1].lng }] };
+        } else {
+          return { ...d, path: [{ lat: d.path[d.path.length-1].lat, lng: d.path[d.path.length-1].lng }] };
+        }
+      });
+      setDrones(updatedDrones);
+    });
+
+    return () => socket.disconnect();
+  }, [drones]);
 
   return (
-    <div className="map-page">
-      <div ref={mapContainer} style={{ width: "100%", height: "100vh" }} />
-      {map && <DroneMarker map={map} drones={drones} />}
-      <MapPopup drones={drones} />
-      <DroneNumber drones={drones} />
-    </div>
+    <>
+      <div ref={mapContainer} className="w-full h-screen" />
+      <DroneMarker map={map.current} drones={drones} markersRef={markersRef} />
+      <MapPopup drones={drones} map={map.current} markersRef={markersRef} />
+    </>
   );
-};
-
-export default Map;
+}
