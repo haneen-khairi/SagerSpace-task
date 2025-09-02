@@ -1,5 +1,4 @@
-import { useEffect, useRef } from "react";
-import type mapboxgl from "mapbox-gl";
+import { useEffect, useRef } from "react"; 
 import type { Drone } from "../../App";
 
 interface FlightPathsProps {
@@ -89,10 +88,10 @@ const FlightPaths: React.FC<FlightPathsProps> = ({ map, drones }) => {
         };
 
         if (activeMap.getSource(sourceId)) {
-          // ✅ Update source data for smooth live updates
+    
           (activeMap.getSource(sourceId) as mapboxgl.GeoJSONSource).setData(geojson);
         } else {
-          // First time: add source + layer
+     
           activeMap.addSource(sourceId, {
             type: "geojson",
             data: geojson,
@@ -116,8 +115,7 @@ const FlightPaths: React.FC<FlightPathsProps> = ({ map, drones }) => {
           sourcesAdded.current.add(sourceId);
         }
       });
-
-      // Cleanup for registrations no longer active
+ 
       const currentRegistrations = new Set(drones.map((d) => d.registration || "Unknown"));
       sourcesAdded.current.forEach((sourceId) => {
         const registration = sourceId.replace("registration-connections-", "");
