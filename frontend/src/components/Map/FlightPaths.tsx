@@ -1,5 +1,4 @@
-import { useEffect, useRef } from "react";
-import type mapboxgl from "mapbox-gl";
+import { useEffect, useRef } from "react"; 
 import type { Drone } from "../../App";
 
 interface FlightPathsProps {
