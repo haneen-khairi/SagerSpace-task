@@ -6,6 +6,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import type { Drone } from "../../App";
 import DroneNumber from "./DroneNumber";
 import DroneMarker from "./DroneMarker";
+import FlightPaths from "./FlightPaths";
 
 mapboxgl.accessToken =
   "pk.eyJ1IjoiaGFuZWVueW91c2VmIiwiYSI6ImNtZXI4b20xbTAzczQybnF0cXdzMmlqc3oifQ.dB9XSIFL1eH-4IcXxzkBDA";
@@ -35,6 +36,7 @@ const Map: React.FC<MapProps> = ({ drones }) => {
     <div className="map-page">
       <div ref={mapContainer} style={{ width: "100%", height: "100vh" }} />
       {map && <DroneMarker map={map} drones={drones} />}
+      {map && <FlightPaths map={map} drones={drones} />}
       <MapPopup drones={drones} />
       <DroneNumber drones={drones} />
     </div>

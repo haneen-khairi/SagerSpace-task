@@ -33,7 +33,7 @@ function App() {
     socket.on("message", (data: any) => { 
       if (!data || data.type !== "FeatureCollection" || !Array.isArray(data.features)) return;
 
-      setDrones(prev => {
+      setDrones(prev => { 
         const updated = { ...prev };
 
         data.features.forEach((f: any) => {
@@ -84,6 +84,7 @@ function App() {
           toDelete.forEach(({ k }) => delete updated[k]);
         }
 
+        console.log("🚀 ~ App ~ updated:", updated)
         return updated;
       });
     });
