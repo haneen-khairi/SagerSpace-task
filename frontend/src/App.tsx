@@ -84,7 +84,7 @@ function App() {
           toDelete.forEach(({ k }) => delete updated[k]);
         }
 
-        console.log("🚀 ~ App ~ updated:", updated)
+ 
         return updated;
       });
     });

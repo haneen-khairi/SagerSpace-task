@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import mapboxgl from "mapbox-gl";
+import type mapboxgl from "mapbox-gl";
 import type { Drone } from "../../App";
 
 interface FlightPathsProps {
@@ -12,18 +12,18 @@ const FlightPaths: React.FC<FlightPathsProps> = ({ map, drones }) => {
 
   useEffect(() => {
     if (!map) return;
- 
+
     if (!map.isStyleLoaded()) {
       map.on("styledata", () => {
         if (map.isStyleLoaded()) {
-          addFlightPaths();
+          addFlightPaths(map);
         }
       });
     } else {
-      addFlightPaths();
+      addFlightPaths(map);
     }
 
-    function addFlightPaths() { 
+    function addFlightPaths(activeMap: mapboxgl.Map) {
       const dronesByRegistration = drones.reduce((acc, drone) => {
         const registration = drone.registration || "Unknown";
         if (!acc[registration]) {
@@ -32,115 +32,105 @@ const FlightPaths: React.FC<FlightPathsProps> = ({ map, drones }) => {
         acc[registration].push(drone);
         return acc;
       }, {} as Record<string, Drone[]>);
-      console.log(
-        "🚀 ~ addFlightPaths ~ dronesByRegistration:",
-        dronesByRegistration
-      );
  
-      Object.entries(dronesByRegistration).forEach(
-        ([registration, registrationDrones]) => { 
-          if (registrationDrones.length < 2) return;
 
-          const sourceId = `registration-connections-${registration}`;
-          const layerId = `registration-connections-layer-${registration}`;
- 
-          if (map.getSource(sourceId)) {
-            if (map.getLayer(layerId)) {
-              map.removeLayer(layerId);
-            }
-            map.removeSource(sourceId);
+      Object.entries(dronesByRegistration).forEach(([registration, registrationDrones]) => {
+        if (registrationDrones.length < 2) return;
+
+        const sourceId = `registration-connections-${registration}`;
+        const layerId = `registration-connections-layer-${registration}`;
+
+        if (activeMap.getSource(sourceId)) {
+          if (activeMap.getLayer(layerId)) {
+            activeMap.removeLayer(layerId);
           }
- 
-          const currentPositions = registrationDrones
-            .filter((drone) => drone.path.length > 0)
-            .map((drone) => {
-              const lastPosition = drone.path[drone.path.length - 1];
-              return {
-                serial: drone.serial,
-                position: [lastPosition.lng, lastPosition.lat] as [
-                  number,
-                  number
-                ],
-                color: drone.color,
-              };
-            });
- 
-          const connectionFeatures: any[] = [];
+          activeMap.removeSource(sourceId);
+        }
 
-          for (let i = 0; i < currentPositions.length; i++) {
-            for (let j = i + 1; j < currentPositions.length; j++) {
-              const drone1 = currentPositions[i];
-              const drone2 = currentPositions[j];
- 
-              let lineColor = "#e74c3c"; 
-              if (drone1.color === "green" && drone2.color === "green") {
-                lineColor = "#2ecc71"; 
-              } else if (drone1.color === "green" || drone2.color === "green") {
-                lineColor = "#f39c12";  
-              }
-
-              connectionFeatures.push({
-                type: "Feature" as const,
-                properties: {
-                  registration: registration,
-                  connectionId: `${registration}-${i}-${j}`,
-                  drone1Serial: drone1.serial,
-                  drone2Serial: drone2.serial,
-                  drone1Color: drone1.color,
-                  drone2Color: drone2.color,
-                  lineColor: lineColor,
-                },
-                geometry: {
-                  type: "LineString" as const,
-                  coordinates: [drone1.position, drone2.position],
-                },
-              });
-            }
-          }
- 
-          if (connectionFeatures.length > 0) {
-            const geojson = {
-              type: "FeatureCollection" as const,
-              features: connectionFeatures,
+        const currentPositions = registrationDrones
+          .filter((drone) => drone.path.length > 0)
+          .map((drone) => {
+            const lastPosition = drone.path[drone.path.length - 1];
+            return {
+              serial: drone.serial,
+              position: [lastPosition.lng, lastPosition.lat] as [number, number],
+              color: drone.color,
             };
- 
-            map.addSource(sourceId, {
-              type: "geojson",
-              data: geojson,
-            });
- 
-            map.addLayer({
-              id: layerId,
-              type: "line",
-              source: sourceId,
-              layout: {
-                "line-join": "round",
-                "line-cap": "round",
-              },
-              paint: {
-                "line-color": ["get", "lineColor"],  
-                "line-width": 3,
-                "line-opacity": 1,
-              },
-            });
+          });
 
-            sourcesAdded.current.add(sourceId);
+        const connectionFeatures: any[] = [];
+
+        for (let i = 0; i < currentPositions.length; i++) {
+          for (let j = i + 1; j < currentPositions.length; j++) {
+            const drone1 = currentPositions[i];
+            const drone2 = currentPositions[j];
+
+            let lineColor = "#e74c3c";
+            if (drone1.color === "green" && drone2.color === "green") {
+              lineColor = "#2ecc71";
+            } else if (drone1.color === "green" || drone2.color === "green") {
+              lineColor = "#f39c12";
+            }
+
+            connectionFeatures.push({
+              type: "Feature" as const,
+              properties: {
+                registration,
+                connectionId: `${registration}-${i}-${j}`,
+                drone1Serial: drone1.serial,
+                drone2Serial: drone2.serial,
+                drone1Color: drone1.color,
+                drone2Color: drone2.color,
+                lineColor,
+              },
+              geometry: {
+                type: "LineString" as const,
+                coordinates: [drone1.position, drone2.position],
+              },
+            });
           }
         }
-      );
- 
-      const currentRegistrations = new Set(
-        drones.map((d) => d.registration || "Unknown")
-      );
+
+        if (connectionFeatures.length > 0) {
+          const geojson = {
+            type: "FeatureCollection" as const,
+            features: connectionFeatures,
+          };
+
+          activeMap.addSource(sourceId, {
+            type: "geojson",
+            data: geojson,
+          });
+
+          activeMap.addLayer({
+            id: layerId,
+            type: "line",
+            source: sourceId,
+            layout: {
+              "line-join": "round",
+              "line-cap": "round",
+            },
+            paint: {
+              "line-color": ["get", "lineColor"],
+              "line-width": 3,
+              "line-opacity": 1,
+            },
+          });
+
+          sourcesAdded.current.add(sourceId);
+        }
+      });
+
+      const currentRegistrations = new Set(drones.map((d) => d.registration || "Unknown"));
       sourcesAdded.current.forEach((sourceId) => {
         const registration = sourceId.replace("registration-connections-", "");
         if (!currentRegistrations.has(registration)) {
           const layerId = `registration-connections-layer-${registration}`;
-          if (map.getLayer(layerId)) {
-            map.removeLayer(layerId);
+          if (activeMap.getLayer(layerId)) {
+            activeMap.removeLayer(layerId);
           }
-          if (map.getSource(sourceId)) {
-            map.removeSource(sourceId);
+          if (activeMap.getSource(sourceId)) {
+            activeMap.removeSource(sourceId);
           }
           sourcesAdded.current.delete(sourceId);
         }
