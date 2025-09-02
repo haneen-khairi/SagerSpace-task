@@ -1,4 +1,5 @@
-import { useEffect, useRef } from "react"; 
+import { useEffect, useRef } from "react";
+import type mapboxgl from "mapbox-gl";
 import type { Drone } from "../../App";
 
 interface FlightPathsProps {
@@ -15,14 +16,14 @@ const FlightPaths: React.FC<FlightPathsProps> = ({ map, drones }) => {
     if (!map.isStyleLoaded()) {
       map.on("styledata", () => {
         if (map.isStyleLoaded()) {
-          addFlightPaths(map);
+          updateFlightPaths(map);
         }
       });
     } else {
-      addFlightPaths(map);
+      updateFlightPaths(map);
     }
 
-    function addFlightPaths(activeMap: mapboxgl.Map) {
+    function updateFlightPaths(activeMap: mapboxgl.Map) {
       const dronesByRegistration = drones.reduce((acc, drone) => {
         const registration = drone.registration || "Unknown";
         if (!acc[registration]) {
@@ -31,20 +32,12 @@ const FlightPaths: React.FC<FlightPathsProps> = ({ map, drones }) => {
         acc[registration].push(drone);
         return acc;
       }, {} as Record<string, Drone[]>);
- 
 
       Object.entries(dronesByRegistration).forEach(([registration, registrationDrones]) => {
         if (registrationDrones.length < 2) return;
 
         const sourceId = `registration-connections-${registration}`;
         const layerId = `registration-connections-layer-${registration}`;
-
-        if (activeMap.getSource(sourceId)) {
-          if (activeMap.getLayer(layerId)) {
-            activeMap.removeLayer(layerId);
-          }
-          activeMap.removeSource(sourceId);
-        }
 
         const currentPositions = registrationDrones
           .filter((drone) => drone.path.length > 0)
@@ -90,12 +83,16 @@ const FlightPaths: React.FC<FlightPathsProps> = ({ map, drones }) => {
           }
         }
 
-        if (connectionFeatures.length > 0) {
-          const geojson = {
-            type: "FeatureCollection" as const,
-            features: connectionFeatures,
-          };
+        const geojson = {
+          type: "FeatureCollection" as const,
+          features: connectionFeatures,
+        };
 
+        if (activeMap.getSource(sourceId)) {
+          // ✅ Update source data for smooth live updates
+          (activeMap.getSource(sourceId) as mapboxgl.GeoJSONSource).setData(geojson);
+        } else {
+          // First time: add source + layer
           activeMap.addSource(sourceId, {
             type: "geojson",
             data: geojson,
@@ -120,6 +117,7 @@ const FlightPaths: React.FC<FlightPathsProps> = ({ map, drones }) => {
         }
       });
 
+      // Cleanup for registrations no longer active
       const currentRegistrations = new Set(drones.map((d) => d.registration || "Unknown"));
       sourcesAdded.current.forEach((sourceId) => {
         const registration = sourceId.replace("registration-connections-", "");
