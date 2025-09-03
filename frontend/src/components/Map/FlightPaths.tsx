@@ -57,10 +57,10 @@ const FlightPaths: React.FC<FlightPathsProps> = ({ map, drones }) => {
             const drone2 = currentPositions[j];
 
             let lineColor = "#e74c3c";
-            if (drone1.color === "green" && drone2.color === "green") {
-              lineColor = "#2ecc71";
+            if (drone1.color === "red" && drone2.color === "red") {
+              lineColor = "#e74c3c";
             } else if (drone1.color === "green" || drone2.color === "green") {
-              lineColor = "#f39c12";
+              lineColor = "#2ecc71";
             }
 
             connectionFeatures.push({
@@ -106,8 +106,8 @@ const FlightPaths: React.FC<FlightPathsProps> = ({ map, drones }) => {
               "line-cap": "round",
             },
             paint: {
-              "line-color": ["get", "lineColor"],
-              "line-width": 3,
+           "line-color": ["to-color", ["get", "lineColor"]],
+              "line-width": 5,
               "line-opacity": 1,
             },
           });
