@@ -1,17 +1,22 @@
 import type { Drone } from "../../App";
-interface DroneNumberProps{
-      drones: Drone[];
+
+interface DroneNumberProps {
+  drones: Drone[];
 }
-const DroneNumber: React.FC<DroneNumberProps> = ({ drones }) => {
-    return (
-        <>
-            <div className="drone-number">
-                <div className="number">
-                    {drones.filter((drone: any) => drone.color !== "green").length}
-                </div>
-                <p>Drone Flying</p>
-            </div>
-        </>
-    );
-}
+
+const DroneNumber: React.FC<DroneNumberProps> = ({ drones }) => { 
+  const redRegistrations = new Set(
+    drones
+      .filter((drone) => drone.color === "red")
+      .map((drone) => drone.registration || "Unknown")
+  );
+
+  return (
+    <div className="drone-number">
+      <div className="number">{redRegistrations.size}</div>
+      <p>Drone Flying</p>
+    </div>
+  );
+};
+
 export default DroneNumber;
