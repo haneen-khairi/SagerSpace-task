@@ -14,8 +14,7 @@ const DroneMarker: React.FC<DroneMarkerProps> = ({ map, drones }) => {
 
   useEffect(() => {
     if (!map) return;
-
-    // Group drones by registration
+ 
     const dronesByRegistration = drones.reduce((acc, d) => {
       const reg = d.registration || "Unknown";
       if (!acc[reg]) acc[reg] = [];
@@ -26,7 +25,7 @@ const DroneMarker: React.FC<DroneMarkerProps> = ({ map, drones }) => {
     const presentRegistrations = new Set<string>();
 
     Object.entries(dronesByRegistration).forEach(([registration, regDrones]) => {
-      // pick the latest drone (based on path length)
+     
       const latestDrone = regDrones.reduce((latest, current) => {
         if (!latest) return current;
         return current.path.length > latest.path.length ? current : latest;
@@ -37,8 +36,7 @@ const DroneMarker: React.FC<DroneMarkerProps> = ({ map, drones }) => {
 
       const last = latestDrone.path[latestDrone.path.length - 1];
       const lngLat: [number, number] = [last.lng, last.lat];
-
-      // Update marker if exists
+ 
       if (markersRef.current[registration]) {
         markersRef.current[registration].setLngLat(lngLat);
       } else {
@@ -88,8 +86,7 @@ const DroneMarker: React.FC<DroneMarkerProps> = ({ map, drones }) => {
         }
       }
     });
-
-    // Remove old markers for registrations no longer present
+ 
     Object.keys(markersRef.current).forEach((reg) => {
       if (!presentRegistrations.has(reg)) {
         markersRef.current[reg].remove();
